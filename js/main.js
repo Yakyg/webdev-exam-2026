@@ -1,3 +1,11 @@
+let allCourses = [];
+let currentPage = 1;
+const COURSES_PER_PAGE = 5;
+
+
+
+
+
 const API_URL = 'http://exam-api-courses.std-900.ist.mospolytech.ru';
 const API_KEY = 'PASTE_YOUR_API_KEY_HERE';
 
@@ -7,7 +15,10 @@ function loadCourses() {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            renderCourses(data);
+            allCourses = data;
+            currentPage = 1;
+            renderCoursesPage();
+            renderCoursesPagination();
         })
         .catch(error => {
             showNotification('Ошибка загрузки курсов', 'danger');
@@ -44,6 +55,48 @@ function renderCourses(courses) {
         `;
         coursesContainer.appendChild(col);
     });
+}
+
+function renderCoursesPage() {
+    const start = (currentPage - 1) * COURSES_PER_PAGE;
+    const end = start + COURSES_PER_PAGE;
+
+    const pageCourses = allCourses.slice(start, end);
+    renderCourses(pageCourses);
+}
+
+function renderCoursesPagination() {
+    const totalPages = Math.ceil(allCourses.length / COURSES_PER_PAGE);
+
+    let pagination = document.getElementById('courses-pagination');
+    if (!pagination) {
+        pagination = document.createElement('nav');
+        pagination.id = 'courses-pagination';
+        pagination.className = 'mt-4';
+
+        document.querySelector('.container').appendChild(pagination);
+    }
+
+    let html = '<ul class="pagination justify-content-center">';
+
+    for (let i = 1; i <= totalPages; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <button class="page-link" onclick="changeCoursesPage(${i})">
+                    ${i}
+                </button>
+            </li>
+        `;
+    }
+
+    html += '</ul>';
+    pagination.innerHTML = html;
+}
+
+function changeCoursesPage(page) {
+    currentPage = page;
+    renderCoursesPage();
+    renderCoursesPagination();
 }
 
 function showNotification(message, type) {
