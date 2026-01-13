@@ -3,64 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Language School</title>
-
-    <!-- Bootstrap 5.3 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- HEADER -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">Language School</a>
-
-        <div class="collapse navbar-collapse show">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Курсы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="profile.html">Личный кабинет</a>
-                </li>
-            </ul>
-        </div>
+        <span class="navbar-brand">Language School</span>
+        <a href="profile.html" class="btn btn-outline-light">Личный кабинет</a>
     </div>
 </nav>
 
-<!-- NOTIFICATIONS -->
-<div class="container mt-3">
-    <div id="notifications"></div>
-</div>
+<div class="container mt-3" id="notifications"></div>
 
-<!-- MAIN CONTENT -->
 <div class="container mt-4">
-    <h1 class="mb-4">Изучайте иностранные языки</h1>
-
-    <p>
-        Наша языковая школа предлагает курсы для начинающих,
-        среднего и продвинутого уровня.
-    </p>
-
-    <h2 class="mt-5">Доступные курсы</h2>
-
-    <div id="courses" class="row mt-3">
-        <!-- Курсы будут загружаться сюда -->
-    </div>
+    <h1>Курсы иностранных языков</h1>
+    <div class="row" id="courses"></div>
 </div>
 
-<!-- FOOTER -->
-<footer class="bg-light mt-5 p-4">
-    <div class="container text-center">
-        <p>Контакты: info@languageschool.ru</p>
-        <p>© 2025 Language School</p>
-    </div>
+<footer class="bg-light text-center p-3 mt-5">
+    Контакты: info@languageschool.ru
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/courses.js"></script>
 </body>
 </html>
