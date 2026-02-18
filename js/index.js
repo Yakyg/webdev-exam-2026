@@ -274,6 +274,8 @@ async function init() {
     renderCourses(1);
     renderTutors();
     populateLanguageFilter();
+
+    initMap();
 }
 
 function renderTutors(filtered = allTutors) {
@@ -379,6 +381,132 @@ window.filterCourses = function() {
     allCourses = filtered;          
     renderCourses(1);
 };
+
+function initMap() {
+    ymaps.ready(() => {
+        const myMap = new ymaps.Map('map', {
+            center: [55.7558, 37.6173],  
+            zoom: 11,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+
+        // Массив мест 
+        const places = [
+            {
+                name: 'Всероссийская библиотека иностранной литературы им. Рудомино',
+                address: 'Николоямская ул., 1, Москва',
+                hours: 'Пн–Пт 10:00–18:00, Сб–Вс выходной',
+                contact: '+7 (495) 915–78–85, academy@libfl.ru',
+                desc: 'Курсы английского, китайского, немецкого, испанского, арабского, итальянского. Бесплатные мероприятия и клубы.'
+            },
+            {
+                name: 'Библиотека им. Н.А. Некрасова',
+                address: 'Бауманская ул., 58/25 стр.14, Москва',
+                hours: 'Еженедельные клубы',
+                contact: 'nekrasovka.ru',
+                desc: 'Разговорные клубы: итальянский, испанский, корейский, английский, французский, чувашский.'
+            },
+            {
+                name: 'Российская государственная библиотека для молодёжи',
+                address: 'Большая Черкизовская ул., 4 к.1, Москва',
+                hours: 'Встречи 4 раза в месяц, напр. 19:00',
+                contact: '+7 (499) 670-80-01, info@rgub.ru',
+                desc: 'Ридинг-клуб: чтение на английском, французском, немецком, испанском. Грамматика и медленное чтение.'
+            },
+            {
+                name: 'Japan Foundation',
+                address: 'Николоямская ул., 1, Москва (4-й этаж)',
+                hours: 'Семестры',
+                contact: 'jpfmw.ru',
+                desc: 'Бесплатные курсы японского для разных уровней с носителями.'
+            },
+            {
+                name: 'Российско-немецкий дом',
+                address: 'Малая Пироговская ул., 5, Москва',
+                hours: 'Очно и онлайн',
+                contact: 'deutschkurse.rusdeutsch.ru',
+                desc: 'Клуб немецкого языка, культура Германии.'
+            },
+            {
+                name: 'Израильский культурный центр',
+                address: 'Стремянный пер., 38, Москва (4-й этаж)',
+                hours: 'Курсы по 72 часа',
+                contact: 'il4u.org.il',
+                desc: 'Бесплатные курсы иврита на начальных уровнях.'
+            },
+            {
+                name: 'Культурный центр им. Джавахарлала Неру',
+                address: 'Воронцово Поле ул., 9 стр.2, Москва',
+                hours: 'Членство 750 руб/мес',
+                contact: '+7 (495) 783-75-35',
+                desc: 'Курсы хинди, йога, индийская музыка.'
+            },
+            {
+                name: 'Антикафе Ziferblat',
+                address: 'Кузнецкий Мост ул., 19 стр.1, Москва',
+                hours: 'После 18:00',
+                contact: 'most.ziferblat.net',
+                desc: 'Разговорные клубы английского, немецкого, французского, испанского.'
+            },
+            {
+                name: 'Корейский культурный центр',
+                address: 'Арбат ул., 24, Москва',
+                hours: 'Набор 2 раза в год',
+                contact: 'russia.korean-culture.org',
+                desc: 'Бесплатные курсы корейского языка.'
+            }
+        ];
+
+        // Геокодируем адреса и добавляем метки
+    const geoPromises = places.map(place => {
+        return ymaps.geocode(place.address, { results: 1 })
+            .then(res => {
+                const geoObject = res.geoObjects.get(0);
+                if (geoObject) {
+                    const coords = geoObject.geometry.getCoordinates();
+                    console.log(`Успех для ${place.name}:`, coords); // ← для отладки
+
+                    const balloonContent = `
+                        <strong>${place.name}</strong><br>
+                        <b>Адрес:</b> ${place.address}<br>
+                       <b>Часы:</b> ${place.hours}<br>
+                      <b>Контакт:</b> ${place.contact}<br><br>
+                      ${place.desc}
+                   `;
+
+                  const placemark = new ymaps.Placemark(coords, {
+                      hintContent: place.name,
+                        balloonContent: balloonContent
+                 }, {
+                       preset: 'islands#blueEducationIcon'
+                  });
+
+                    myMap.geoObjects.add(placemark);
+                    return coords;
+                } else {
+                   console.warn(`Не найдено координат для: ${place.address}`);
+                  return null;
+              }
+              })
+             .catch(err => {
+                 console.error(`Ошибка геокодирования для "${place.address}":`, err);
+                return null;
+          });
+    });
+
+        // После всех геокодирований устанавливаем границы
+        Promise.all(geoPromises).then(coordsList => {
+            const validCoords = coordsList.filter(c => c);
+            if (validCoords.length > 0) {
+                myMap.setBounds(ymaps.util.bounds.fromPoints(validCoords), {
+                    checkZoomRange: true,
+                    precise: true
+                });
+            }
+        });
+    });
+}
+
 
 // Запуск
 init();

@@ -45,3 +45,8 @@ body {
 .tutor-row.selected:hover {
     background-color: #badbcc !important;
 }
+
+#map {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
