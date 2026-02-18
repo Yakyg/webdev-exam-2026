@@ -35,3 +35,13 @@ body {
     z-index: 9999;
     min-width: 300px;
 }
+
+.tutor-row.selected {
+    background-color: #d1e7dd !important;   
+    border-left: 4px solid #0f5132;
+    font-weight: 500;
+}
+
+.tutor-row.selected:hover {
+    background-color: #badbcc !important;
+}
