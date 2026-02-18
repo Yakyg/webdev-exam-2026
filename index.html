@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <title>LinguaHub — Языковая школа</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="bg-primary text-white py-3">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#"><img src="assets/favicon.png" alt="LinguaHub" height="40" class="d-inline-block">LinguaHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto">
+                    <li><a class="nav-link" href="#courses">Курсы</a></li>
+                    <li><a class="nav-link" href="#tutors">Репетиторы</a></li>
+                    <li><a class="nav-link" href="cabinet.html">Личный кабинет</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="container my-5">
+
+
+    <section class="mb-5">
+        <h2>Добро пожаловать в LinguaHub</h2>
+        <p class="lead">Мы помогаем изучать иностранные языки быстро и с удовольствием. Более 5000 студентов уже говорят на новом языке.</p>
+    </section>
+
+    <section class="row mb-5">
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>Карьерный рост</h5><p>Новый язык открывает двери в международные компании</p></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>Путешествия</h5><p>Общайтесь с людьми по всему миру без барьеров</p></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>Новый мир культуры</h5><p>Фильмы, книги, музыка в оригинале</p></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><h5>Гибкий график</h5><p>Занимайся онлайн в удобное время</p></div></div></div>
+    </section>
+
+    <!-- Курсы -->
+    <section id="courses" class="mb-5">
+        <h3>Наши курсы</h3>
+
+        <!-- Поиск -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <input type="text" id="courseSearch" class="form-control" placeholder="Название курса...">
+            </div>
+            <div class="col-md-4">
+                <select id="levelFilter" class="form-select">
+                    <option value="">Все уровни</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="filterCourses()">Найти</button>
+            </div>
+        </div>
+
+        <div id="coursesContainer" class="row row-cols-1 row-cols-md-3 g-4"></div>
+
+        <!-- Пагинация -->
+        <nav id="coursesPagination" class="mt-4"></nav>
+    </section>
+
+    <!-- Репетиторы -->
+    <section id="tutors" class="mb-5">
+        <h3>Репетиторы</h3>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <select id="languageFilter" class="form-select" onchange="filterTutors()">
+                    <option value="">Любой язык</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="tutorLevelFilter" class="form-select" onchange="filterTutors()">
+                    <option value="">Любой уровень</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+        <select id="experienceFilter" class="form-select" onchange="filterTutors()">
+            <option value="">Любой опыт</option>
+            <option value="0-2">0–2 года</option>
+            <option value="3-5">3–5 лет</option>
+            <option value="6-10">6–10 лет</option>
+            <option value="11+">11+ лет</option>
+        </select>
+    </div>
+        </div>
+
+        <table class="table table-hover" id="tutorsTable">
+            <thead><tr><th>Фото</th><th>Имя</th><th>Уровень</th><th>Языки</th><th>Опыт</th><th>Цена/час</th><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </section>
+</div>
+
+<footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+        <p>© 2026 LinguaHub. Все права защищены.<br>
+        +7 (495) 123-45-67 • info@linguahub.ru</p>
+    </div>
+</footer>
+
+<!-- Модальное окно заявки на курс -->
+<div class="modal fade" id="courseModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Оформление заявки на курс</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="courseModalBody">
+                <!-- JS заполнит -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-success" onclick="submitCourseOrder()">Отправить заявку</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно заявки на репетитора -->
+<div class="modal fade" id="tutorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Запрос занятия с репетитором</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="selectedTutorInfo" class="mb-3"></div>
+                <div class="mb-3">
+                    <label>Дата занятия</label>
+                    <input type="date" id="tutorDate" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>Время начала</label>
+                    <input type="time" id="tutorTime" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>Длительность (часов)</label>
+                    <input type="number" id="tutorDuration" value="1" min="1" max="40" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>Сообщение репетитору</label>
+                    <textarea id="tutorMessage" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="submitTutorOrder()">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/index.js"></script>
+</body>
+</html>
